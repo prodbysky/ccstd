@@ -4,14 +4,16 @@
 int main(int argc, char** argv) {
     NOB_GO_REBUILD_URSELF(argc, argv);
     Nob_Cmd str_build = {0};
-    nob_cmd_append(&str_build, "gcc", "-ggdb", "-c", "src/string.c");
+    nob_cmd_append(&str_build, "gcc", "-ggdb", "-c", "src/string.c",
+                   "src/arena.c");
     if (!nob_cmd_run_sync(str_build)) {
-        nob_log(NOB_ERROR, "Failed to build src/string.c");
+        nob_log(NOB_ERROR, "Failed to build src/string.c && src/arena.c");
         return 1;
     }
 
     Nob_Cmd static_lib_build = {0};
-    nob_cmd_append(&static_lib_build, "ar", "rcs", "libccstd.a", "string.o");
+    nob_cmd_append(&static_lib_build, "ar", "rcs", "libccstd.a", "string.o",
+                   "arena.o");
     if (!nob_cmd_run_sync(static_lib_build)) {
         nob_log(NOB_ERROR, "Failed to archive libccstd.a");
         return 1;
@@ -27,6 +29,6 @@ int main(int argc, char** argv) {
     }
 
     Nob_Cmd cleanup = {0};
-    nob_cmd_append(&cleanup, "rm", "string.o");
+    nob_cmd_append(&cleanup, "rm", "string.o", "arena.o");
     nob_cmd_run_sync(cleanup);
 }

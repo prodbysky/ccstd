@@ -2,11 +2,6 @@
 
 #include <stdint.h>
 
-#ifndef CCS_NOLIBC
-#include <stdlib.h>
-#endif
-
-#define memzero(ptr, n) CCS_MEMSET((ptr), 0, n)
 const static uint64_t STRING_INIT_CAP = 32;
 const static float STRING_GROW_FACTOR = 1.5;
 
@@ -17,6 +12,7 @@ struct String {
 };
 
 #ifndef CCS_NOLIBC
+#include <stdlib.h>
 String* String_new() { return String_new_with_capacity(STRING_INIT_CAP); }
 
 String* String_new_with_capacity(uint64_t cap) {
@@ -91,6 +87,23 @@ char String_pop(String* str) {
     CCS_ASSERT(str->str);
     char c = str->str[--str->len];
     return c;
+}
+String* String_from_cstr_alloc(const char* c_str, Allocator allocator,
+                               AllocFunc func) {
+    CCS_ASSERT(c_str);
+    const uint64_t len = CCS_STRLEN(c_str);
+
+    String* str = func(allocator, sizeof(String));
+    CCS_ASSERT(str);
+    str->str = func(allocator, sizeof(char) * len);
+    str->len = len;
+    str->cap = len;
+
+    CCS_ASSERT(str->str);
+
+    memzero(str->str, sizeof(char) * len);
+    CCS_MEMCPY(str->str, c_str, sizeof(char) * len);
+    return str;
 }
 
 void String_clear(String* str) {

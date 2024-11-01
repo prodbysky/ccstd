@@ -4,9 +4,8 @@
 #include <stdio.h>
 
 int main() {
-    String s = String_from_cstr("  \t\n  69420!    t");
-    String_trim_left(&s);
-    uint64_t i = String_chop_u64(&s);
+    String s = String_from_cstr("69420");
+    printf("%b\n", String_starts_with_cstr(&s, "69"));
     printf(STR_FMT "\n", STR_ARG(s));
-    printf("%lu\n", i);
+    String_free(&s);
 }

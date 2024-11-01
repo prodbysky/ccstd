@@ -42,6 +42,12 @@ String String_from_cstr(const char* c_str) {
     memcpy(str.str, c_str, sizeof(char) * len);
     return str;
 }
+void String_free(String* str) {
+    assert(str);
+    assert(str->str);
+    free(str->str);
+    memzero(str, sizeof(String));
+}
 
 char String_pop(String* str) {
     assert(str);
@@ -103,25 +109,41 @@ uint64_t String_chop_u64(String* str) {
     return result;
 }
 
+static bool is_whitespace(char c) { return c == ' ' || c == '\t' || c == '\n'; }
+
 void String_trim_left(String* str) {
+    String_trim_left_while(str, is_whitespace);
+}
+
+void String_trim_right(String* str) {
+    String_trim_right_while(str, is_whitespace);
+}
+
+void String_trim(String* str) {
+    String_trim_left(str);
+    String_trim_right(str);
+}
+
+void String_trim_left_while(String* str, bool (*predicate)(char c)) {
     assert(str);
     assert(str->str);
 
-    while ((*str->str == ' ' || *str->str == '\t' || *str->str == '\n') &&
-           str->len > 0) {
+    while (predicate(*str->str) && str->len > 0) {
         str->len--;
         str->str++;
     }
 }
-
-void String_trim_right(String* str) {
+void String_trim_right_while(String* str, bool (*predicate)(char c)) {
     assert(str);
     assert(str->str);
 
-    while ((*(str->str + str->len - 1) == ' ' ||
-            *(str->str + str->len - 1) == '\t' ||
-            *(str->str + str->len - 1) == '\n') &&
-           str->len > 0) {
+    while (predicate(*str->str) && str->len > 0) {
         str->len--;
     }
+}
+
+bool String_starts_with_cstr(String* str, const char* cstr) {
+    const uint64_t len = strlen(cstr);
+
+    return strncmp(str->str, cstr, len) == 0;
 }

@@ -9,9 +9,12 @@
     (int) (String_get_immutable_len((s))), String_get_immutable_str((s))
 
 typedef struct String String;
-typedef void* (*AllocFunc)(void* allocator, uint64_t size);
-typedef void* (*ReallocFunc)(void* allocator, void* original, uint64_t size);
-typedef void (*FreeFunc)(void* allocator, void* ptr);
+typedef void* Allocator;
+typedef void* (*AllocFunc)(Allocator allocator, uint64_t size);
+typedef void* (*ReallocFunc)(Allocator allocator, void* original,
+                             uint64_t size);
+typedef void (*FreeFunc)(Allocator allocator, void* ptr);
+typedef bool (*CharPredicate)(char c);
 
 #ifndef CCS_ASSERT
 #ifdef CCS_NOLIBC
@@ -90,18 +93,18 @@ uint64_t String_chop_u64(String* str);
 void String_trim_left(String* str);
 void String_trim_right(String* str);
 void String_trim(String* str);
-void String_trim_left_while(String* str, bool (*predicate)(char c));
-void String_trim_right_while(String* str, bool (*predicate)(char c));
+void String_trim_left_while(String* str, CharPredicate predicate);
+void String_trim_right_while(String* str, CharPredicate predicate);
 
 bool String_starts_with_cstr(const String* str, const char* cstr);
 
-String* String_new_alloc(void* allocator, AllocFunc func);
-String* String_new_with_capacity_alloc(uint64_t cap, void* allocator,
+String* String_new_alloc(Allocator allocator, AllocFunc func);
+String* String_new_with_capacity_alloc(uint64_t cap, Allocator allocator,
                                        AllocFunc func);
 void String_free_alloc(String* str, void* allocator, FreeFunc func);
-void String_push_c_alloc(String* str, char c, void* allocator,
+void String_push_c_alloc(String* str, char c, Allocator allocator,
                          ReallocFunc func);
-void String_push_cstr_alloc(String* str, const char* cstr, void* allocator,
+void String_push_cstr_alloc(String* str, const char* cstr, Allocator allocator,
                             ReallocFunc func);
 
 #endif // STRING_H_

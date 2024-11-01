@@ -137,7 +137,7 @@ void String_trim(String* str) {
     String_trim_right(str);
 }
 
-void String_trim_left_while(String* str, bool (*predicate)(char c)) {
+void String_trim_left_while(String* str, CharPredicate predicate) {
     CCS_ASSERT(str);
     CCS_ASSERT(str->str);
 
@@ -146,7 +146,7 @@ void String_trim_left_while(String* str, bool (*predicate)(char c)) {
         str->str++;
     }
 }
-void String_trim_right_while(String* str, bool (*predicate)(char c)) {
+void String_trim_right_while(String* str, CharPredicate predicate) {
     CCS_ASSERT(str);
     CCS_ASSERT(str->str);
 
@@ -161,10 +161,10 @@ bool String_starts_with_cstr(const String* str, const char* cstr) {
     return CCS_STRNCMP(str->str, cstr, len) == 0;
 }
 
-String* String_new_alloc(void* allocator, AllocFunc func) {
+String* String_new_alloc(Allocator allocator, AllocFunc func) {
     return String_new_with_capacity_alloc(STRING_INIT_CAP, allocator, func);
 }
-String* String_new_with_capacity_alloc(uint64_t cap, void* allocator,
+String* String_new_with_capacity_alloc(uint64_t cap, Allocator allocator,
                                        AllocFunc func) {
 
     String* str = func(allocator, sizeof(String));
@@ -177,14 +177,14 @@ String* String_new_with_capacity_alloc(uint64_t cap, void* allocator,
     memzero(str->str, sizeof(char) * cap);
     return str;
 }
-void String_free_alloc(String* str, void* allocator, FreeFunc func) {
+void String_free_alloc(String* str, Allocator allocator, FreeFunc func) {
     CCS_ASSERT(str);
     CCS_ASSERT(str->str);
     func(allocator, str->str);
     func(allocator, str);
     memzero(str, sizeof(String));
 }
-void String_push_c_alloc(String* str, char c, void* allocator,
+void String_push_c_alloc(String* str, char c, Allocator allocator,
                          ReallocFunc func) {
     CCS_ASSERT(str);
     CCS_ASSERT(str->str);
@@ -194,7 +194,7 @@ void String_push_c_alloc(String* str, char c, void* allocator,
     }
     str->str[str->len++] = c;
 }
-void String_push_cstr_alloc(String* str, const char* cstr, void* allocator,
+void String_push_cstr_alloc(String* str, const char* cstr, Allocator allocator,
                             ReallocFunc func) {
     CCS_ASSERT(str);
     CCS_ASSERT(str->str);

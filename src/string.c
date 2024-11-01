@@ -157,3 +157,50 @@ bool String_starts_with_cstr(const String* str, const char* cstr) {
 
     return strncmp(str->str, cstr, len) == 0;
 }
+
+String* String_new_alloc(void* allocator, AllocFunc func) {
+    return String_new_with_capacity_alloc(STRING_INIT_CAP, allocator, func);
+}
+String* String_new_with_capacity_alloc(uint64_t cap, void* allocator,
+                                       AllocFunc func) {
+
+    String* str = func(allocator, sizeof(String));
+    assert(str);
+    str->str = func(allocator, sizeof(char) * cap);
+    str->len = 0;
+    str->cap = cap;
+    assert(str->str);
+
+    memzero(str->str, sizeof(char) * cap);
+    return str;
+}
+void String_free_alloc(String* str, void* allocator, FreeFunc func) {
+    assert(str);
+    assert(str->str);
+    func(allocator, str->str);
+    func(allocator, str);
+    memzero(str, sizeof(String));
+}
+void String_push_c_alloc(String* str, char c, void* allocator,
+                         ReallocFunc func) {
+    assert(str);
+    assert(str->str);
+    if (str->len >= str->cap) {
+        str->cap *= STRING_GROW_FACTOR;
+        str->str  = func(allocator, str->str, sizeof(char) * str->cap);
+    }
+    str->str[str->len++] = c;
+}
+void String_push_cstr_alloc(String* str, const char* cstr, void* allocator,
+                            ReallocFunc func) {
+    assert(str);
+    assert(str->str);
+    assert(cstr);
+    const uint64_t len = strlen(cstr);
+    if (str->len + len >= str->cap) {
+        str->cap += len;
+        str->str  = func(allocator, str->str, sizeof(char) * str->cap);
+    }
+    memcpy(str->str + str->len, cstr, len);
+    str->len += len;
+}

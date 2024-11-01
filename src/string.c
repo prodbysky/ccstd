@@ -9,43 +9,53 @@
 const static uint64_t STRING_INIT_CAP = 32;
 const static float STRING_GROW_FACTOR = 1.5;
 
-String String_new() { return String_new_with_capacity(STRING_INIT_CAP); }
+struct String {
+    char* str;
+    uint64_t len;
+    uint64_t cap;
+};
 
-String String_new_with_capacity(uint64_t cap) {
-    String str = {
-        .str = (char*) malloc(sizeof(char) * cap),
-        .len = 0,
-        .cap = cap,
-    };
+String* String_new() { return String_new_with_capacity(STRING_INIT_CAP); }
 
-    if (!str.str)
-        return str;
+String* String_new_with_capacity(uint64_t cap) {
+    String* str = malloc(sizeof(String));
+    assert(str);
+    str->str = malloc(sizeof(char) * cap);
+    str->len = 0;
+    str->cap = cap;
 
-    memzero(str.str, sizeof(char) * cap);
+    assert(str->str);
+
+    memzero(str->str, sizeof(char) * cap);
     return str;
 }
 
-String String_from_cstr(const char* c_str) {
+String* String_from_cstr(const char* c_str) {
     assert(c_str);
     const uint64_t len = strlen(c_str);
 
-    String str = {
-        .str = (char*) malloc(sizeof(char) * len),
-        .len = len,
-        .cap = len,
-    };
+    String* str = malloc(sizeof(String));
+    assert(str);
+    str->str = malloc(sizeof(char) * len);
+    str->len = len;
+    str->cap = len;
 
-    if (!str.str)
-        return str;
+    assert(str->str);
 
-    memzero(str.str, sizeof(char) * len);
-    memcpy(str.str, c_str, sizeof(char) * len);
+    memzero(str->str, sizeof(char) * len);
+    memcpy(str->str, c_str, sizeof(char) * len);
     return str;
 }
+
+const char* String_get_immutable_str(String* str) { return str->str; }
+uint64_t String_get_immutable_len(String* str) { return str->len; }
+uint64_t String_get_immutable_cap(String* str) { return str->cap; }
+
 void String_free(String* str) {
     assert(str);
     assert(str->str);
     free(str->str);
+    free(str);
     memzero(str, sizeof(String));
 }
 
@@ -86,7 +96,7 @@ void String_clear(String* str) {
     str->len = 0;
 }
 
-bool String_is_empty(String* str) {
+bool String_is_empty(const String* str) {
     assert(str);
     assert(str->str);
     return str->len == 0;
@@ -142,7 +152,7 @@ void String_trim_right_while(String* str, bool (*predicate)(char c)) {
     }
 }
 
-bool String_starts_with_cstr(String* str, const char* cstr) {
+bool String_starts_with_cstr(const String* str, const char* cstr) {
     const uint64_t len = strlen(cstr);
 
     return strncmp(str->str, cstr, len) == 0;

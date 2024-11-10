@@ -1,8 +1,7 @@
 #ifndef CCSTD_STRING_H_
 #define CCSTD_STRING_H_
 
-#include "prelude.h"
-
+#include <prelude.h>
 #include <stdbool.h>
 #include <stdint.h>
 

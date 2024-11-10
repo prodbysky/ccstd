@@ -1,9 +1,8 @@
-#include "include/arena.h"
-#include "include/lcg.h"
-#include "include/string.h"
-
+#include <arena.h>
+#include <lcg.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <str.h>
 
 int main() {
     Arena* arena = Arena_new(1024);

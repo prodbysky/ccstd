@@ -1,8 +1,7 @@
 #ifndef CCSTD_ARENA_H_
 #define CCSTD_ARENA_H_
 
-#include "prelude.h"
-
+#include <prelude.h>
 #include <stdint.h>
 typedef struct Arena Arena;
 

@@ -101,4 +101,13 @@ typedef bool (*CharPredicate)(char c);
 #endif
 #endif
 
+#ifndef CCS_FILE_HANDLE
+#ifdef CCS_NOLIBC
+#error No file handle provided!
+#else
+#include <stdio.h>
+#define CCS_FILE_HANDLE FILE*
+#endif
+#endif
+
 #endif

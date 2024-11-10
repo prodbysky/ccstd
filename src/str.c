@@ -1,6 +1,5 @@
-#include "../include/string.h"
-
 #include <stdint.h>
+#include <str.h>
 
 static const uint64_t STRING_INIT_CAP = 32;
 static const float STRING_GROW_FACTOR = 1.5;

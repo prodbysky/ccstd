@@ -1,6 +1,6 @@
 #ifndef CCSTD_MATH_H_
 #define CCSTD_MATH_H_
-#include "prelude.h"
+#include <prelude.h>
 
 #ifndef CCS_PI
 #define CCS_PI 3.14159265358979323846

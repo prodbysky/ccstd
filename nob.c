@@ -31,6 +31,6 @@ int main(int argc, char** argv) {
     }
 
     Nob_Cmd cleanup = {0};
-    nob_cmd_append(&cleanup, "rm", "string.o", "arena.o", "lcg.o");
+    nob_cmd_append(&cleanup, "rm", "string.o", "arena.o", "lcg.o", "math.o");
     nob_cmd_run_sync(cleanup);
 }

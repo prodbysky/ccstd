@@ -65,4 +65,40 @@ typedef bool (*CharPredicate)(char c);
 #endif
 #endif
 
+#ifndef CCS_COS
+#ifdef CCS_NOLIBC
+#error No cos function provided!
+#else
+#include <math.h>
+#define CCS_COS(rads) cos(rads)
+#endif
+#endif
+
+#ifndef CCS_SIN
+#ifdef CCS_NOLIBC
+#error No sin function provided!
+#else
+#include <math.h>
+#define CCS_SIN(rads) sin(rads)
+#endif
+#endif
+
+#ifndef CCS_SQRT
+#ifdef CCS_NOLIBC
+#error No sqrt function provided!
+#else
+#include <math.h>
+#define CCS_SQRT(x) sqrt(x)
+#endif
+#endif
+
+#ifndef CCS_ATAN2F
+#ifdef CCS_NOLIBC
+#error No atan2f function provided!
+#else
+#include <math.h>
+#define CCS_ATAN2F(x, y) atan2f(x, y)
+#endif
+#endif
+
 #endif

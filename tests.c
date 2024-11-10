@@ -1,4 +1,5 @@
 #include "include/arena.h"
+#include "include/lcg.h"
 #include "include/string.h"
 
 #include <stdint.h>
@@ -10,4 +11,8 @@ int main() {
     printf("%b\n", String_starts_with_cstr(s, "69"));
     printf(STR_FMT "\n", STR_ARG(s));
     String_free_alloc(s, arena, Arena_free_allocation);
+
+    for (int i = 0; i < 10; i++) {
+        printf("%d\n", LCG_rand());
+    }
 }

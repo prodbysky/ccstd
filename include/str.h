@@ -9,6 +9,14 @@
 #define STR_ARG(s)                                                             \
     (int) (String_get_immutable_len((s))), String_get_immutable_str((s))
 
+typedef enum {
+    SE_ERROR                  = 0,
+    SE_MALLOC                 = 1,
+    SE_INVALID_STRING_PASSED  = 2,
+    SE_INVALID_CSTRING_PASSED = 3,
+    SE_STRING_UNDERFLOW       = 4,
+} StringError;
+
 typedef struct String String;
 
 #ifndef CCS_NOLIBC

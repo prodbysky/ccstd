@@ -46,7 +46,11 @@ void Arena_free(Allocator arena) {
     free(ar);
 }
 #endif
-void Arena_free_allocation(Allocator allocator, void* ptr) {}
+// Nop since you cant free allocations with an arena
+void Arena_free_allocation(Allocator allocator, void* ptr) {
+    (void) allocator;
+    (void) ptr;
+}
 
 Arena* Arena_new_alloc(uint64_t size, Allocator allocator, AllocFunc func) {
     Arena* arena = func(allocator, sizeof(Arena));

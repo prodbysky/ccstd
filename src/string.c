@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-const static uint64_t STRING_INIT_CAP = 32;
-const static float STRING_GROW_FACTOR = 1.5;
+static const uint64_t STRING_INIT_CAP = 32;
+static const float STRING_GROW_FACTOR = 1.5;
 
 struct String {
     char* str;
@@ -48,9 +48,9 @@ String* String_from_cstr(const char* c_str) {
 void String_free(String* str) {
     CCS_ASSERT(str);
     CCS_ASSERT(str->str);
+    memzero(str, sizeof(String));
     free(str->str);
     free(str);
-    memzero(str, sizeof(String));
 }
 
 void String_push_c(String* str, char c) {

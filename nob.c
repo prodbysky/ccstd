@@ -4,8 +4,8 @@
 int main(int argc, char** argv) {
     NOB_GO_REBUILD_URSELF(argc, argv);
     Nob_Cmd str_build = {0};
-    nob_cmd_append(&str_build, "gcc", "-ggdb", "-c", "src/string.c",
-                   "src/arena.c", "src/lcg.c");
+    nob_cmd_append(&str_build, "gcc", "-ggdb", "-Werror", "-Wextra", "-Wall",
+                   "-c", "src/string.c", "src/arena.c", "src/lcg.c");
     if (!nob_cmd_run_sync(str_build)) {
         nob_log(NOB_ERROR,
                 "Failed to build src/string.c || src/arena.c || src/lcg.c");

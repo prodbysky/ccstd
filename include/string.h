@@ -43,6 +43,7 @@ bool String_starts_with_cstr(const String* str, const char* cstr);
 String* String_from_cstr_alloc(const char* c_str, Allocator allocator,
                                AllocFunc func);
 String* String_new_alloc(Allocator allocator, AllocFunc func);
+
 String* String_new_with_capacity_alloc(uint64_t cap, Allocator allocator,
                                        AllocFunc func);
 void String_free_alloc(String* str, void* allocator, FreeFunc func);

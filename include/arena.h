@@ -14,8 +14,7 @@ void Arena_free(Allocator arena);
 #endif
 
 Arena* Arena_new_alloc(uint64_t size, Allocator allocator, AllocFunc func);
-void Arena_free_allocation(Allocator allocator, void* ptr);
-
 void Arena_free_alloc(Allocator arena, Allocator allocator, FreeFunc func);
+void Arena_free_allocation(Allocator allocator, void* ptr);
 
 #endif

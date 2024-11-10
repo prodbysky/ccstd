@@ -8,4 +8,6 @@ typedef struct {
     uint64_t len;
     CCS_FILE_HANDLE file;
 } File;
+
+File File_open(const char* name);
 #endif

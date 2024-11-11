@@ -13,7 +13,20 @@ uint64_t _get_arena_capacity(Arena* arena) {
 }
 uint64_t _get_arena_used(Arena* arena) { return *(((uint64_t*) arena) + 1); }
 
+int arena_tests();
+int string_tests();
+
 int main() {
+    if (arena_tests() != 0)
+        return 1;
+    if (string_tests() != 0)
+        return 1;
+
+    // TODO: Math tests when I realize how to reasonably test it
+    return 0;
+}
+
+int arena_tests() {
     printf(ANSI_GREEN "Arena\n" ANSI_RESET);
 
     Arena* arena = Arena_new(1024);
@@ -53,9 +66,10 @@ int main() {
     printf(ANSI_GREEN "\tArena: " ANSI_RESET "`Arena_clear` success\n");
     Arena_free(arena);
     printf(ANSI_GREEN "Arena: " ANSI_RESET "tests finished with no fails!\n");
+    return 0;
+}
 
-    // TODO: Math tests when I realize how to reasonably test it
-
+int string_tests() {
     printf(ANSI_GREEN "String\n" ANSI_RESET);
     String* str  = String_new();
     uint64_t cap = String_get_immutable_cap(str);
@@ -71,7 +85,7 @@ int main() {
     const char* test_cstr = "Hello!";
     str                   = String_from_cstr(test_cstr);
     cap                   = String_get_immutable_cap(str);
-    len                   = String_get_immutable_cap(str);
+    uint64_t len          = String_get_immutable_cap(str);
 
     if (cap != strlen(test_cstr)) {
         printf(ANSI_RED "\tExpected capacity: %zu, got: %zu\n" ANSI_RESET,
@@ -111,4 +125,5 @@ int main() {
     printf(ANSI_GREEN "\tString: " ANSI_RESET "`String_push_c_str` success\n");
 
     printf(ANSI_GREEN "String: " ANSI_RESET "tests finished with no fails!\n");
+    return 0;
 }

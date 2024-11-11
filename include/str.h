@@ -27,6 +27,7 @@ void String_free(String* str);
 void String_push_c(String* str, char c);
 void String_push_cstr(String* str, const char* cstr);
 #endif
+StringError String_error(const String* str);
 
 const char* String_get_immutable_str(String* str);
 uint64_t String_get_immutable_len(String* str);

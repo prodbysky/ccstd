@@ -6,16 +6,16 @@ int main(int argc, char** argv) {
     Nob_Cmd str_build = {0};
     nob_cmd_append(&str_build, "gcc", "-ggdb", "-Werror", "-Wextra", "-Wall",
                    "-I", "./include/", "-c", "src/str.c", "src/arena.c",
-                   "src/lcg.c", "src/maths.c");
+                   "src/lcg.c", "src/maths.c", "src/dyn_array.c");
     if (!nob_cmd_run_sync(str_build)) {
         nob_log(NOB_ERROR, "Failed to build src/str.c || src/arena.c || "
-                           "src/lcg.c || src/maths.c");
+                           "src/lcg.c || src/maths.c || src/dyn_array.c");
         return 1;
     }
 
     Nob_Cmd static_lib_build = {0};
     nob_cmd_append(&static_lib_build, "ar", "rcs", "libccstd.a", "str.o",
-                   "arena.o", "lcg.o", "maths.o");
+                   "arena.o", "lcg.o", "maths.o", "dyn_array.o");
     if (!nob_cmd_run_sync(static_lib_build)) {
         nob_log(NOB_ERROR, "Failed to archive libccstd.a");
         return 1;
@@ -31,6 +31,7 @@ int main(int argc, char** argv) {
     }
 
     Nob_Cmd cleanup = {0};
-    nob_cmd_append(&cleanup, "rm", "str.o", "arena.o", "lcg.o", "maths.o");
+    nob_cmd_append(&cleanup, "rm", "str.o", "arena.o", "lcg.o", "maths.o",
+                   "dyn_array.o");
     nob_cmd_run_sync(cleanup);
 }

@@ -21,9 +21,21 @@ typedef struct {
     *((element_type*) ((array_ptr)->elements) + index) = element
 
 #ifndef CCS_NOLIBC
+#include <stdlib.h>
 DynArray DynArray_new_(uint64_t size);
 void DynArray_free(DynArray* array);
 void DynArray_resize(DynArray* array, uint64_t new_size);
+#define DynArray_push(array, element, element_type)                            \
+    do {                                                                       \
+        if (array.len >= array.cap) {                                          \
+            array.cap *= 1.5;                                                  \
+            array.elements =                                                   \
+                realloc(array.elements, array.cap * sizeof(element_type));     \
+        }                                                                      \
+        DynArray_insert(&array, array.len, element, element_type);             \
+        array.len++;                                                           \
+    } while (0)
+
 #endif
 
 void* DynArray_get_(DynArray* array, uint64_t index);

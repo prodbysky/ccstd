@@ -1,3 +1,5 @@
+#include "dyn_array.h"
+
 #include <arena.h>
 #include <lcg.h>
 #include <stdint.h>
@@ -21,6 +23,14 @@ int main() {
         return 1;
     if (string_tests() != 0)
         return 1;
+    DynArray arr = DynArray_new(int);
+    for (int i = 0; i < 10; i++) {
+        DynArray_push(arr, i, int);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        printf("%d\n", DynArray_get(&arr, i, int));
+    }
 
     // TODO: Math tests when I realize how to reasonably test it
     return 0;

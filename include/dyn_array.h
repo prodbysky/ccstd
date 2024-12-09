@@ -30,7 +30,7 @@ void* DynArray_get_(DynArray* array, uint64_t index);
 
 DynArray DynArray_new_alloc_(uint64_t size, Allocator a, AllocFunc func);
 void DynArray_free_alloc(DynArray* array, Allocator a, FreeFunc func);
-void DynArray_resize_alloc(DynArray* array, uint64_t new_size, Allocator a,
+void DynArray_resize_alloc(DynArray* array, uint64_t new_len, Allocator a,
                            ReallocFunc f);
 
 #endif
